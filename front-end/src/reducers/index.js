@@ -1,4 +1,4 @@
-import { ADD_TO_CART, CHANGE_ORDER_CART, CHANGED_QUANTITY,ADD_ADDRESS } from '../actions';
+import { ADD_TO_CART, CHANGE_ORDER_CART, CHANGED_QUANTITY,ADD_ADDRESS, SET_SHIP_ADDRESS,PLACE_ORDER,EMPTY_CART } from '../actions';
 
 const initialStateProducts = {
   products: [
@@ -114,6 +114,8 @@ const cartReducer = (state = initialStateCart, action) => {
       const newItems = [...state.items];
       newItems[index] = action.payload;
       return { ...state, items: newItems };
+    case EMPTY_CART:
+      return { ...state, items: []}  
     default:
       return state;
   }
@@ -132,7 +134,9 @@ const orderReducer = (state = initialStateOrder, action) => {
         0
       );
       return { ...state, items: action.payload, total_items, total_cost };
-    default:
+    case SET_SHIP_ADDRESS:
+      return { ...state, shipping_address:action.payload };
+      default:
       return state;
   }
 };
@@ -141,7 +145,9 @@ const userReducer = (state = initialStateUser, action) => {
   switch (action.type) {
     case ADD_ADDRESS:
       return {...state, addresses:[...state.addresses,action.payload]}
-    default:
+    case PLACE_ORDER:
+      return {...state, orders:[...state.orders,action.payload]}
+      default:
       return state;
   }
 };

@@ -33,7 +33,7 @@ const Nav = ({cartCount})=>(
                   My Account
                 </a>
                 <ul className="dropdown-menu bg-dark text-light" aria-labelledby="navbarDropdown">
-                  <li><a className="dropdown-item" href="/#" data-bs-toggle="modal" data-bs-target="#exampleModal">My Orders</a></li>
+                  <li><Link className="dropdown-item" to="/myorders" >My Orders</Link></li>
                   <li><a className="dropdown-item" href="/#" data-bs-toggle="modal" data-bs-target="#exampleModal">Profile</a></li>
                   <li><hr className="dropdown-divider"/></li>
                   <li><a className="dropdown-item" href="/#">Logout</a></li>
