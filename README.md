@@ -1,7 +1,7 @@
 # Instructions
 
 
-### for front-end only code which has not APIs use 'front-end' branch
+### for front-end only code, which has no APIs, use 'front-end' branch
 
 ``` git checkout front-end```
 
