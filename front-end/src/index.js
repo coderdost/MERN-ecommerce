@@ -15,6 +15,7 @@ import {
   Route,
 } from "react-router-dom";
 import CheckoutPage from './pages/checkoutPage';
+import ProductDetailsPage from './pages/productDetailsPage';
 
 
 const store = configureStore(
@@ -38,7 +39,7 @@ root.render(
         <Route path="cart" element={<CartPage />} />
         <Route path="checkout" element={<CheckoutPage />} />
         <Route path="myorders" element={<OrdersPage />} />
-
+        <Route path="product/:productId" element={<ProductDetailsPage />} />
       </Route>
     </Routes>
   </BrowserRouter>

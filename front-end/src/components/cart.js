@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
 
-const Cart = ({items, order, changeQuantity})=>{
+const Cart = ({items, order, changeQuantity, removeItem})=>{
   
 
   return(
     <div className="container mb-5">
       <div className="d-flex flex-row align-items-start">
+     
         <div className="col-8 d-flex flex-column m-2">
+        <h2>Cart : {!items.length?'No Items in Cart': null}</h2>
           {items.map(item=><div className="cart-item p-3">
             <div className="d-flex flex-row">
               <img
@@ -21,13 +23,13 @@ const Cart = ({items, order, changeQuantity})=>{
               </div>
               <div className="col-2 p-2">
                 Quatity
-                <select name="" id="" onChange={(e)=>changeQuantity(e.target.value, item)}>
+                <select name="" id="" value={item.quantity} onChange={(e)=>changeQuantity(e.target.value, item)}>
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
                 </select>
               </div>
-              <div data-bs-toggle="modal" data-bs-target="#removeItemModal"
+              <div onClick={()=>removeItem(item)}
                 className="col-2 d-flex justify-content-end align-items-start close"
               >
                 <i className="bi bi-x-circle"></i>
@@ -36,7 +38,7 @@ const Cart = ({items, order, changeQuantity})=>{
           </div>)}
           
         </div>
-        <div className="col-4 order p-3 m-2">
+       {order.items.length? <div className="col-4 order p-3 m-2">
           <h4>Order Total</h4>
           <div className="d-flex flex-row py-2">
             <input type="text" className="form-control" placeholder="promo code" />
@@ -66,7 +68,7 @@ const Cart = ({items, order, changeQuantity})=>{
           <div className="d-flex mt-3">
               <Link to="/checkout" className="btn btn-primary flex-grow-1">Pay Now</Link>
           </div>
-        </div>
+        </div>:null}
       </div>
     </div>
 )};

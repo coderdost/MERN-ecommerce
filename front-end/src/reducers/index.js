@@ -1,4 +1,4 @@
-import { ADD_TO_CART, CHANGE_ORDER_CART, CHANGED_QUANTITY,ADD_ADDRESS, SET_SHIP_ADDRESS,PLACE_ORDER,EMPTY_CART } from '../actions';
+import { ADD_TO_CART, CHANGE_ORDER_CART, CHANGED_QUANTITY,ADD_ADDRESS, SET_SHIP_ADDRESS,PLACE_ORDER,EMPTY_CART,REMOVE_ITEM } from '../actions';
 
 const initialStateProducts = {
   products: [
@@ -16,7 +16,7 @@ const initialStateProducts = {
         merchant: '',
       },
       image: 'product-1-square',
-      images: ['product-1-square', 'product-1-square', 'product-1-square'],
+      images: ['product-1', 'product-1-2', 'product-1-3'],
     },
     {
       id: 2,
@@ -32,7 +32,7 @@ const initialStateProducts = {
         merchant: '',
       },
       image: 'product-2-square',
-      images: ['product-2-square', 'product-2-square', 'product-2-square'],
+      images: ['product-2', 'product-2-2', 'product-2-3'],
     },
     {
       id: 3,
@@ -48,7 +48,7 @@ const initialStateProducts = {
         merchant: '',
       },
       image: 'product-3-square',
-      images: ['product-3-square', 'product-3-square', 'product-3-square'],
+      images: ['product-3', 'product-3-1', 'product-3-2'],
     },
   ],
 };
@@ -114,6 +114,12 @@ const cartReducer = (state = initialStateCart, action) => {
       const newItems = [...state.items];
       newItems[index] = action.payload;
       return { ...state, items: newItems };
+    case REMOVE_ITEM:
+       const item = action.payload;
+       const i = state.items.findIndex(it=>it.id===item.id);
+       const itemsArray =[...state.items];
+       itemsArray.splice(i,1);
+       return {...state, items: itemsArray}
     case EMPTY_CART:
       return { ...state, items: []}  
     default:

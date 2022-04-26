@@ -18,6 +18,7 @@ const OrdersPage = () => {
   return (
      <>
      <Nav cartCount={cartItems.length}></Nav>
+     <h2>My Orders</h2> 
      {user.orders.map(order=><Orders items={order.items} order={order}></Orders>)}
      <Footer></Footer>
      </> 
