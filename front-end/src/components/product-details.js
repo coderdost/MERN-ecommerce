@@ -1,4 +1,4 @@
-const ProductDetails = ({product})=>(
+const ProductDetails = ({product, addToCart})=>(
     <div class="container mb-5 mt-5">
     <div class="row d-flex flex-row">
         <div class="col-md-5 product-image">
@@ -17,17 +17,17 @@ const ProductDetails = ({product})=>(
             <div class="text-secondary text-small">color :</div>
             <div class="my-2">
               <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked/>
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked={product.color=='red'}/>
                 <label class="btn btn-danger color-label" for="btnradio1">
                   <i class="bi bi-check2"></i>
                 </label>
               
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off"/>
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" checked={product.color=='green'}/>
                 <label class="btn btn-success color-label" for="btnradio2">
                   <i class="bi bi-check2"></i>
                 </label>
               
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off"/>
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" checked={product.color=='black'}/>
                 <label class="btn btn-dark color-label" for="btnradio3">
                   <i class="bi bi-check2"></i>
                 </label>
@@ -36,18 +36,18 @@ const ProductDetails = ({product})=>(
             <div class="text-secondary text-small">size :</div>
             <div class="my-2">
               <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                <input type="radio" class="btn-check" name="size" id="btnradio4" autocomplete="off" checked/>
+                <input type="radio" class="btn-check" name="size" id="btnradio4" autocomplete="off" checked={product.size=='S'}/>
                 <label class="btn btn-outline-dark" for="btnradio4">S</label>
               
-                <input type="radio" class="btn-check" name="size" id="btnradio5" autocomplete="off"/>
+                <input type="radio" class="btn-check" name="size" id="btnradio5" autocomplete="off" checked={product.size=='M'}/>
                 <label class="btn btn-outline-dark" for="btnradio5">M</label>
               
-                <input type="radio" class="btn-check" name="size" id="btnradio6" autocomplete="off"/>
+                <input type="radio" class="btn-check" name="size" id="btnradio6" autocomplete="off"checked={product.size=='L'}/>
                 <label class="btn btn-outline-dark" for="btnradio6">L</label>
               </div>
             </div>
            
-            <button class="btn btn-dark w-100 my-5" onclick="showToast()"><i class="bi bi-cart-plus-fill"></i>
+            <button class="btn btn-dark w-100 my-5" onClick={()=>addToCart(product)}><i class="bi bi-cart-plus-fill"></i>
                 Add to Cart </button>
             <div>
               <span class="text-secondary text-small">Details :</span>

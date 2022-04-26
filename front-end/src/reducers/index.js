@@ -48,7 +48,7 @@ const initialStateProducts = {
         merchant: '',
       },
       image: 'product-3-square',
-      images: ['product-3', 'product-3-1', 'product-3-2'],
+      images: ['product-3', 'product-3-2', 'product-3-3'],
     },
   ],
 };

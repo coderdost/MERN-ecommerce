@@ -3,7 +3,7 @@ import Footer from '../components/footer';
 import {useDispatch, useSelector} from 'react-redux';
 import { useParams } from 'react-router-dom';
 import ProductDetails from '../components/product-details';
-
+import {ADD_TO_CART} from '../actions';
 
 const ProductDetailsPage = () => {
   const dispatch = useDispatch();  
@@ -13,11 +13,14 @@ const ProductDetailsPage = () => {
   const product = products.find(p=>p.id==productId)
   console.log(productId,products,product);
 
+  const addToCart = (product)=>{
+    dispatch({type:ADD_TO_CART,payload:product})
+  }
 
   return (
      <>
      <Nav cartCount={cartItems.length}></Nav>
-     <ProductDetails product={product}></ProductDetails>
+     <ProductDetails product={product} addToCart={addToCart}></ProductDetails>
      <Footer></Footer>
      </> 
   );
