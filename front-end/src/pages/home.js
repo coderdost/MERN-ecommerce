@@ -3,7 +3,7 @@ import Nav from '../components/navbar';
 import Carousel from '../components/carousel';
 import Footer from '../components/footer';
 import {useDispatch, useSelector} from 'react-redux'
-import { ADD_TO_CART } from '../actions';
+import { addToCartAC, ADD_TO_CART } from '../actions';
 
 
 const Home = () => {
@@ -12,7 +12,7 @@ const Home = () => {
   const cartItems = useSelector(state=>state.cart.items)
 
   const addToCart = (product)=>{
-    dispatch({type:ADD_TO_CART,payload:product})
+    dispatch(addToCartAC(product))
   }
 
   return (

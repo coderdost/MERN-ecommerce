@@ -2,7 +2,7 @@ import Nav from '../components/navbar';
 import Footer from '../components/footer';
 import Checkout from '../components/checkout';
 import {useDispatch, useSelector} from 'react-redux'
-import { ADD_ADDRESS,SET_SHIP_ADDRESS,PLACE_ORDER,EMPTY_CART } from '../actions';
+import { ADD_ADDRESS,SET_SHIP_ADDRESS,PLACE_ORDER,EMPTY_CART, addAddressAC, setShipAddressAC, placeOrderAC, emptyCartAC } from '../actions';
 
 
 const CheckoutPage = () => {
@@ -12,15 +12,15 @@ const CheckoutPage = () => {
   const user = useSelector(state=>state.user);
 
   const addAddress = (address)=>{
-    dispatch({type:ADD_ADDRESS, payload:address})
+    dispatch(addAddressAC(address))
   }
   const setShipAddress = (address)=>{
-    dispatch({type:SET_SHIP_ADDRESS, payload:address})
+    dispatch(setShipAddressAC(address))
   }
   const placeOrder = ()=>{
     if(order.shipping_address){
-      dispatch({type:PLACE_ORDER, payload:order});
-      dispatch({type:EMPTY_CART});
+      dispatch(placeOrderAC(order));
+      dispatch(emptyCartAC());
     }else{
       alert('Choose a Shipping Address');
     }
