@@ -4,8 +4,10 @@ const { Schema } = mongoose;
 const PORT = 8080;
 const app  = express();
 const cors = require('cors');
+const json = require('body-parser').json;
 
 app.use(cors())
+app.use(json());
 
 const productSchema = new Schema({
     name:  {type:String, required:true}, 
@@ -20,7 +22,7 @@ const productSchema = new Schema({
   }, {timestamps: true});
 
 const cartSchema = new Schema({
-    items:  {type:[productSchema], required:true}, 
+    items:  {type:[productSchema], required:true, default:[]}, 
     userId: {type: Number, default:1}
 }, {timestamps: true});
 
@@ -73,9 +75,28 @@ app.get('/product',(req,res)=>{
 app.post('/cart',(req,res)=>{
     
     const userId =1;
-    const itemId = req.body.itemId;
-    Cart.findOne({'items.id':itemId}).then(result=>{
-        res.send(result);
+    const item = req.body.item;
+    Cart.findOne({userId:userId}).then(result=>{
+        if(result){
+            const itemIndex = result.items.findIndex(it=>it._id==item._id);
+            if(itemIndex>=0){
+                result.items.splice(itemIndex,1,item);
+            } else{
+                result.items.push(item);
+                result.save().then(res=>{
+                    res.send(res);
+                })    
+            }
+        } else{
+            let cart = new Cart();
+            cart.userId = userId;
+            cart.items = [item];
+            cart.save().then(res=>{
+                res.send(res);
+            })    
+        }
+        
+       
     })
  });
 
