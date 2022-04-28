@@ -86,10 +86,10 @@ app.post('/cart',(req,res)=>{
                 result.items.splice(itemIndex,1,item);
             } else{
                 result.items.push(item);
-                result.save().then(cart=>{
-                    res.send(cart);
-                })    
             }
+            result.save().then(cart=>{
+                res.send(cart);
+            })   
         } else{
             let cart = new Cart();
             cart.userId = userId;
@@ -102,6 +102,19 @@ app.post('/cart',(req,res)=>{
        
     })
  });
+app.get('/cart',(req,res)=>{
+    
+    const userId = 1;
+    Cart.findOne({userId:userId}).then(result=>{
+        if(result){
+            res.send(result)
+        } else {
+            res.send({userId:1, items: []}) 
+        }  
+    });
+
+ });
+
 
 
 app.listen(PORT, ()=>{

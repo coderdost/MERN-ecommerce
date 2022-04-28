@@ -1,4 +1,4 @@
-import { ADD_TO_CART, CHANGE_ORDER_CART, CHANGED_QUANTITY,ADD_ADDRESS, SET_SHIP_ADDRESS,PLACE_ORDER,EMPTY_CART,REMOVE_ITEM, INIT_PRODUCTS } from '../actions';
+import { CHANGED_ITEM_IN_CART, CHANGE_ORDER_CART, CHANGED_QUANTITY,ADD_ADDRESS, SET_SHIP_ADDRESS,PLACE_ORDER,EMPTY_CART,REMOVE_ITEM, INIT_PRODUCTS, INIT_CART } from '../actions';
 
 const initialStateProducts = {
   products: [
@@ -57,18 +57,11 @@ const productReducer = (state = initialStateProducts, action) => {
 
 const cartReducer = (state = initialStateCart, action) => {
   switch (action.type) {
-    case ADD_TO_CART:
-     
+    case CHANGED_ITEM_IN_CART:
       return {
         ...state,
         items: action.payload.items,
       };
-    case CHANGED_QUANTITY:
-      const oldItem = state.items.find((item) => item._id === action.payload._id);
-      const index = state.items.indexOf(oldItem);
-      const newItems = [...state.items];
-      newItems[index] = action.payload;
-      return { ...state, items: newItems };
     case REMOVE_ITEM:
        const item = action.payload;
        const i = state.items.findIndex(it=>it._id===item._id);
