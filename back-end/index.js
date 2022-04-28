@@ -23,7 +23,7 @@ const productSchema = new Schema({
 
 const cartSchema = new Schema({
     items:  {type:[Object], required:true, default:[]}, 
-    userId: {type: Number, default:1}
+    userId: {type: String, default:1}
 }, {timestamps: true});
 
 const userSchema = new Schema({
@@ -99,7 +99,7 @@ app.get('/product',(req,res)=>{
 
 app.post('/cart',(req,res)=>{
     
-    const userId = 1;
+    const userId = "626a8c0054197ff8a6671b2b";  // This will be solved by Sessions
     const item = req.body.item;
     if(!item.quantity){
         item.quantity =1;
@@ -129,7 +129,7 @@ app.post('/cart',(req,res)=>{
  });
 app.get('/cart',(req,res)=>{
     
-    const userId = 1;
+    const userId = "626a8c0054197ff8a6671b2b";
     Cart.findOne({userId:userId}).then(result=>{
         if(result){
             res.send(result)
@@ -141,7 +141,7 @@ app.get('/cart',(req,res)=>{
  });
 app.post('/removeItem',(req,res)=>{
     
-    const userId = 1;
+    const userId = "626a8c0054197ff8a6671b2b";
     const item = req.body.item;
     Cart.findOne({userId:userId}).then(result=>{
 
@@ -155,7 +155,7 @@ app.post('/removeItem',(req,res)=>{
  });
 app.post('/emptyCart',(req,res)=>{
     
-    const userId = 1;
+    const userId = "626a8c0054197ff8a6671b2b";
     Cart.findOne({userId:userId}).then(result=>{
         result.items = [];
         result.save().then(cart=>{
@@ -166,15 +166,26 @@ app.post('/emptyCart',(req,res)=>{
  });
 
 app.post('/updateUserAddress',(req,res)=>{
-    const userId = 1;
+    const userId = "626a8c0054197ff8a6671b2b";
     const address = req.body.address;
-    User.findOneAndUpdate({userId:userId}, {address}).then((user)=>{
+    User.findOne({userId:userId}).then((user)=>{
      user.addresses.push(address);
      user.save().then(user=>{
          res.send(address);
      })
     })
 }) 
+
+app.post('/order',(req,res)=>{
+    const userId = "626a8c0054197ff8a6671b2b";
+    const order = req.body.order;
+    User.findOne({userId:userId}).then((user)=>{
+     user.orders.push(order);
+     user.save().then(user=>{
+         res.send(order); // you can have orderSchema and orderId
+     })
+    })
+})
 
 
 
