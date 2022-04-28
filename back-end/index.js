@@ -30,12 +30,22 @@ const userSchema = new Schema({
     name: String,
     email: String,
     addresses : [Object],
-    orders :[Object]
+    orders :[{ type: Schema.Types.ObjectId, ref: 'Order' }]
 }, {timestamps: true});
+
+const orderSchema = new Schema({
+    items: [Object],
+    shipping_charges: Number,
+    discount_in_percent: Number,
+    shipping_address: Object,
+    total_items: Number,
+    total_cost: Number,
+}) 
 
 const Product = new mongoose.model('Product',productSchema);  
 const Cart = new mongoose.model('Cart',cartSchema);
 const User = new mongoose.model('User',userSchema);
+const Order = new mongoose.model('Order',orderSchema);
 
 main().catch(err => console.log(err));
 
@@ -85,7 +95,7 @@ async function main() {
 // });
 
 app.get('/user',(req,res)=>{
-    User.findOne({}).then(result=>{
+    User.findOne({}).populate('orders').then(result=>{
         res.send(result);
     })
 })
@@ -99,7 +109,7 @@ app.get('/product',(req,res)=>{
 
 app.post('/cart',(req,res)=>{
     
-    const userId = "626a8c0054197ff8a6671b2b";  // This will be solved by Sessions
+    const userId = "626aa06cc41d6e55885c99e5";  // This will be solved by Sessions
     const item = req.body.item;
     if(!item.quantity){
         item.quantity =1;
@@ -129,7 +139,7 @@ app.post('/cart',(req,res)=>{
  });
 app.get('/cart',(req,res)=>{
     
-    const userId = "626a8c0054197ff8a6671b2b";
+    const userId = "626aa06cc41d6e55885c99e5";
     Cart.findOne({userId:userId}).then(result=>{
         if(result){
             res.send(result)
@@ -141,7 +151,7 @@ app.get('/cart',(req,res)=>{
  });
 app.post('/removeItem',(req,res)=>{
     
-    const userId = "626a8c0054197ff8a6671b2b";
+    const userId = "626aa06cc41d6e55885c99e5";
     const item = req.body.item;
     Cart.findOne({userId:userId}).then(result=>{
 
@@ -155,7 +165,7 @@ app.post('/removeItem',(req,res)=>{
  });
 app.post('/emptyCart',(req,res)=>{
     
-    const userId = "626a8c0054197ff8a6671b2b";
+    const userId = "626aa06cc41d6e55885c99e5";
     Cart.findOne({userId:userId}).then(result=>{
         result.items = [];
         result.save().then(cart=>{
@@ -166,7 +176,7 @@ app.post('/emptyCart',(req,res)=>{
  });
 
 app.post('/updateUserAddress',(req,res)=>{
-    const userId = "626a8c0054197ff8a6671b2b";
+    const userId = "626aa06cc41d6e55885c99e5";
     const address = req.body.address;
     User.findOne({userId:userId}).then((user)=>{
      user.addresses.push(address);
@@ -177,14 +187,21 @@ app.post('/updateUserAddress',(req,res)=>{
 }) 
 
 app.post('/order',(req,res)=>{
-    const userId = "626a8c0054197ff8a6671b2b";
+    const userId = "626aa06cc41d6e55885c99e5";
     const order = req.body.order;
-    User.findOne({userId:userId}).then((user)=>{
-     user.orders.push(order);
-     user.save().then(user=>{
-         res.send(order); // you can have orderSchema and orderId
-     })
+    
+    let newOrder = new Order(order);
+    newOrder.save().then(savedOrder=>{
+        User.findOne({userId:userId}).then((user)=>{
+            user.orders.push(savedOrder._id);
+            user.save().then(user=>{
+                res.send(order);
+            })
+           })
     })
+   
+
+  
 })
 
 
