@@ -27,7 +27,7 @@ export const addToCartAC = (product)=>{  //AC = Action Creator
     return function(dispatch){
         axios.post('http://localhost:8080/cart',{item:product}).then(function (response) {
             console.log(response);
-           // dispatch({type:ADD_TO_CART, payload:product})
+            dispatch({type:ADD_TO_CART, payload:response.data})
           })
           .catch(function (error) {
             console.log(error);

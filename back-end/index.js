@@ -22,7 +22,7 @@ const productSchema = new Schema({
   }, {timestamps: true});
 
 const cartSchema = new Schema({
-    items:  {type:[productSchema], required:true, default:[]}, 
+    items:  {type:[Object], required:true, default:[]}, 
     userId: {type: Number, default:1}
 }, {timestamps: true});
 
@@ -74,8 +74,11 @@ app.get('/product',(req,res)=>{
 
 app.post('/cart',(req,res)=>{
     
-    const userId =1;
+    const userId = 1;
     const item = req.body.item;
+    if(!item.quantity){
+        item.quantity =1;
+    }
     Cart.findOne({userId:userId}).then(result=>{
         if(result){
             const itemIndex = result.items.findIndex(it=>it._id==item._id);
@@ -83,16 +86,16 @@ app.post('/cart',(req,res)=>{
                 result.items.splice(itemIndex,1,item);
             } else{
                 result.items.push(item);
-                result.save().then(res=>{
-                    res.send(res);
+                result.save().then(cart=>{
+                    res.send(cart);
                 })    
             }
         } else{
             let cart = new Cart();
             cart.userId = userId;
             cart.items = [item];
-            cart.save().then(res=>{
-                res.send(res);
+            cart.save().then(cart=>{
+                res.send(cart);
             })    
         }
         

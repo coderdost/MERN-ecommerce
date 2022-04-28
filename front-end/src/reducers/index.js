@@ -61,7 +61,7 @@ const cartReducer = (state = initialStateCart, action) => {
      
       return {
         ...state,
-        items: [...state.items, { ...action.payload, quantity: 1 }],
+        items: action.payload.items,
       };
     case CHANGED_QUANTITY:
       const oldItem = state.items.find((item) => item._id === action.payload._id);
