@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const PORT = 8080;
 const app  = express();
+const cors = require('cors');
+
+app.use(cors())
 
 const productSchema = new Schema({
     name:  {type:String, required:true}, 
@@ -16,7 +19,14 @@ const productSchema = new Schema({
     images : {type:[String], required:true},
   }, {timestamps: true});
 
+const cartSchema = new Schema({
+    items:  {type:[productSchema], required:true}, 
+    userId: {type: Number, default:1}
+}, {timestamps: true});
+
+
 const Product = new mongoose.model('Product',productSchema);  
+const Cart = new mongoose.model('Cart',cartSchema);
 
 main().catch(err => console.log(err));
 
@@ -59,6 +69,15 @@ app.get('/product',(req,res)=>{
        res.send(result);
    })
 });
+
+app.post('/cart',(req,res)=>{
+    
+    const userId =1;
+    const itemId = req.body.itemId;
+    Cart.findOne({'items.id':itemId}).then(result=>{
+        res.send(result);
+    })
+ });
 
 
 app.listen(PORT, ()=>{
