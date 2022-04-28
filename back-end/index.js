@@ -26,9 +26,16 @@ const cartSchema = new Schema({
     userId: {type: Number, default:1}
 }, {timestamps: true});
 
+const userSchema = new Schema({
+    name: String,
+    email: String,
+    addresses : [Object],
+    orders :[Object]
+}, {timestamps: true});
 
 const Product = new mongoose.model('Product',productSchema);  
 const Cart = new mongoose.model('Cart',cartSchema);
+const User = new mongoose.model('User',userSchema);
 
 main().catch(err => console.log(err));
 
@@ -65,6 +72,24 @@ async function main() {
 
     
 // })
+// app.get('/createUser',(req,res)=>{
+//    let user = new User({
+//        name : 'John',
+//        email: 'demo@example.com',
+//        orders: [],
+//        addresses:[]
+//    });
+//    user.save().then(usr=>{
+//        res.send(usr)
+//    })
+// });
+
+app.get('/user',(req,res)=>{
+    User.findOne({}).then(result=>{
+        res.send(result);
+    })
+})
+
 
 app.get('/product',(req,res)=>{
    Product.find({}).then(result=>{
@@ -114,6 +139,44 @@ app.get('/cart',(req,res)=>{
     });
 
  });
+app.post('/removeItem',(req,res)=>{
+    
+    const userId = 1;
+    const item = req.body.item;
+    Cart.findOne({userId:userId}).then(result=>{
+
+        const itemIndex = result.items.findIndex(it=>it._id==item._id);
+        result.items.splice(itemIndex,1);
+        result.save().then(cart=>{
+            res.send(cart)
+        })
+    });
+
+ });
+app.post('/emptyCart',(req,res)=>{
+    
+    const userId = 1;
+    Cart.findOne({userId:userId}).then(result=>{
+        result.items = [];
+        result.save().then(cart=>{
+            res.send(cart)
+        })
+    });
+
+ });
+
+app.post('/updateUserAddress',(req,res)=>{
+    const userId = 1;
+    const address = req.body.address;
+    User.findOneAndUpdate({userId:userId}, {address}).then((user)=>{
+     user.addresses.push(address);
+     user.save().then(user=>{
+         res.send(address);
+     })
+    })
+}) 
+
+
 
 
 
