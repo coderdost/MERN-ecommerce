@@ -170,3 +170,9 @@ body{
      width: 2.5rem;
      height: 2.5rem;
   }
+.link {
+    cursor: pointer;
+    color:blue;
+    padding-top: 2rem;
+    text-decoration: underline;
+}  
