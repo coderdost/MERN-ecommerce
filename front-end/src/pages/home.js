@@ -12,7 +12,6 @@ const Home = () => {
   const products = useSelector(state=>state.product.products)
   const cartItems = useSelector(state=>state.cart.items)
   useEffect(()=>{
-    dispatch(initializeUserAC());
     dispatch(initializeProductsAC());
   },[]) 
   const addToCart = (product)=>{

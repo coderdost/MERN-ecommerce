@@ -29,7 +29,9 @@ const cartSchema = new Schema({
 const userSchema = new Schema({
     name: String,
     email: String,
-    addresses : [Object],
+    password: String,
+    username: String,
+    addresses : {type:[Object], default:[]},
     orders :[{ type: Schema.Types.ObjectId, ref: 'Order' }]
 }, {timestamps: true});
 
@@ -94,9 +96,21 @@ async function main() {
 //    })
 // });
 
-app.get('/user',(req,res)=>{
-    User.findOne({}).populate('orders').then(result=>{
-        res.send(result);
+app.post('/login',(req,res)=>{
+    User.findOne({...req.body.user}).then(result=>{
+        if(result){
+            res.send(result);
+        } else{
+            res.send({status:false}).status(404);
+        }
+        
+    })
+})
+
+app.post('/signup',(req,res)=>{
+    let user = new User({...req.body.user, email: req.body.user.username, orders:[]})
+    user.save().then(usr=>{
+        res.send(usr);
     })
 })
 

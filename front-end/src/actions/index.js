@@ -9,6 +9,32 @@ export const INIT_PRODUCTS = 'INIT_PRODUCTS';
 export const INIT_CART = 'INIT_CART';
 export const INIT_USER = 'INIT_USER';
 
+export const loginAC = (user)=>{
+  return function(dispatch){
+    axios.post('http://localhost:8080/login',{user}).then(function (response) {
+        console.log(response);
+        dispatch({type:INIT_USER, payload: response.data})
+        dispatch(initializeCartAC(response.data._id));
+      })
+      .catch(function (error) {
+        console.log(error);
+      })  
+}
+}
+
+export const signupAC = (user)=>{
+  return function(dispatch){
+    axios.post('http://localhost:8080/signup',{user}).then(function (response) {
+        console.log(response);
+        dispatch({type:INIT_USER, payload: response.data})
+        dispatch(initializeCartAC(response.data._id));
+      })
+      .catch(function (error) {
+        console.log(error);
+      })  
+}
+}
+
 export const initializeProductsAC = ()=>{  
     return function(dispatch){
         axios.get('http://localhost:8080/product').then(function (response) {
@@ -32,18 +58,18 @@ export const initializeCartAC = (userId)=>{
     }
 }
 
-export const initializeUserAC = ()=>{  
-    return function(dispatch){
-        axios.get('http://localhost:8080/user').then(function (response) {
-            console.log(response);
-            dispatch({type:INIT_USER, payload: response.data})
-            dispatch(initializeCartAC(response.data._id));
-          })
-          .catch(function (error) {
-            console.log(error);
-          })  
-    }
-}
+// export const initializeUserAC = ()=>{  
+//     return function(dispatch){
+//         axios.get('http://localhost:8080/user').then(function (response) {
+//             console.log(response);
+//             dispatch({type:INIT_USER, payload: response.data})
+//             dispatch(initializeCartAC(response.data._id));
+//           })
+//           .catch(function (error) {
+//             console.log(error);
+//           })  
+//     }
+// }
 
 export const addToCartAC = (product)=>{  //AC = Action Creator
     return function(dispatch){

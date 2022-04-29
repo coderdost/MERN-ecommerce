@@ -173,6 +173,5 @@ body{
 .link {
     cursor: pointer;
     color:blue;
-    padding-top: 2rem;
     text-decoration: underline;
 }  
