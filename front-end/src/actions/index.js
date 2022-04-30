@@ -12,12 +12,15 @@ export const INIT_USER = 'INIT_USER';
 export const loginAC = (user)=>{
   return function(dispatch){
     axios.post('http://localhost:8080/login',{user}).then(function (response) {
-        console.log(response);
-        dispatch({type:INIT_USER, payload: response.data})
-        dispatch(initializeCartAC(response.data._id));
+        if(response.data.status){
+          dispatch({type:INIT_USER, payload: response.data.user})
+          dispatch(initializeCartAC(response.data.user._id));
+        };
+       
       })
       .catch(function (error) {
-        console.log(error);
+        console.log(error.response.data);
+        alert('Incorrect Credentials');
       })  
 }
 }
@@ -25,12 +28,15 @@ export const loginAC = (user)=>{
 export const signupAC = (user)=>{
   return function(dispatch){
     axios.post('http://localhost:8080/signup',{user}).then(function (response) {
-        console.log(response);
-        dispatch({type:INIT_USER, payload: response.data})
-        dispatch(initializeCartAC(response.data._id));
+      if(response.data.status){
+        dispatch({type:INIT_USER, payload: response.data.user})
+        dispatch(initializeCartAC(response.data.user._id));
+      };
       })
       .catch(function (error) {
-        console.log(error);
+        console.log(error.response.data);
+        alert('Username already exist');
+
       })  
 }
 }

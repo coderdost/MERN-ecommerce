@@ -97,21 +97,33 @@ async function main() {
 // });
 
 app.post('/login',(req,res)=>{
-    User.findOne({...req.body.user}).then(result=>{
+    console.log(req.body.user);
+    User.findOne({username: req.body.user.username, password:req.body.user.password}).then(result=>{
         if(result){
-            res.send(result);
+            res.send({status:true, user:result});
         } else{
-            res.send({status:false}).status(404);
+            res.status(404).send({status:false});
         }
         
     })
 })
 
 app.post('/signup',(req,res)=>{
+
+
     let user = new User({...req.body.user, email: req.body.user.username, orders:[]})
-    user.save().then(usr=>{
-        res.send(usr);
-    })
+   
+    User.findOne({username:req.body.user.username}).then(result=>{
+        if(result){
+            res.status(404).send({status:false});
+        } else {
+            user.save().then(usr=>{
+                res.send({status:true, user:usr});
+            })
+        }
+    });
+
+  
 })
 
 
