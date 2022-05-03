@@ -9,6 +9,8 @@ const OrdersPage = () => {
   const cartItems = useSelector(state=>state.cart.items)
   const order = useSelector(state=>state.order)
   const user = useSelector(state=>state.user)
+  const sorted = [...user.orders].sort((a,b)=>(new Date(b.createdAt)-new Date(a.createdAt)))
+
 
 
   
@@ -18,7 +20,7 @@ const OrdersPage = () => {
      <>
      <Nav cartCount={cartItems.length}></Nav>
      <h2>My Orders</h2> 
-     {user.orders.map(order=><Orders items={order.items} order={order}></Orders>)}
+     {sorted.map(order=><Orders items={order.items} order={order}></Orders>)}
      <Footer></Footer>
      </> 
   );

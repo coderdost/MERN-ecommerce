@@ -1,10 +1,11 @@
+import { format } from 'date-fns';
 const Orders = ({ items, order }) => {
   return (
     <div className="container mb-5">
       <div className="d-flex flex-row align-items-start">
         
         <div className="col-11 d-flex flex-column m-2">
-        Order Number : {order._id}
+        Order Number : {order._id} | Date of Order : {format(new Date(order.createdAt), 'dd MMM yyyy')}
           {items.map((item) => (
             <div className="cart-item p-3">
               <div className="d-flex flex-row">

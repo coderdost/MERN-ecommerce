@@ -23,7 +23,7 @@ const Home = () => {
      <>
      <Nav cartCount={cartItems.length}></Nav>
      <Carousel></Carousel>
-     <ProductList products={products} addToCart={addToCart}></ProductList>
+     <ProductList products={products.sort((a,b)=>(b.price-a.price))} addToCart={addToCart}></ProductList>
      <Footer></Footer>
      </> 
   );

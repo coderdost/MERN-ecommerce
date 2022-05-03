@@ -53,7 +53,7 @@ const orderSchema = new Schema({
     shipping_address: Object,
     total_items: Number,
     total_cost: Number,
-}) 
+}, {timestamps: true}) 
 
 const Product = new mongoose.model('Product',productSchema);  
 const Cart = new mongoose.model('Cart',cartSchema);
@@ -141,11 +141,15 @@ app.post('/signup',(req,res)=>{
 
 app.get('/user',(req,res)=>{
   if(req.session.user){
-    res.send({status:true, user:req.session.user});
+    User.findOne({username: req.session.user.username}).populate('orders').then(result=>{
+            req.session.user = result;
+            res.send({status:true, user:result});
+    })
   } else {
     res.send({status:false});
   }
 });
+// you will need to call this for order updates. Not the best solution. you can make and Order GET API also.
 
 
 
