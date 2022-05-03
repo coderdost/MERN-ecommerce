@@ -3,9 +3,11 @@ import Footer from '../components/footer';
 import Checkout from '../components/checkout';
 import {useDispatch, useSelector} from 'react-redux'
 import { ADD_ADDRESS,SET_SHIP_ADDRESS,PLACE_ORDER,EMPTY_CART, addAddressAC, setShipAddressAC, placeOrderAC, emptyCartAC } from '../actions';
+import { useNavigate } from 'react-router-dom';
 
 
 const CheckoutPage = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();  
   const cartItems = useSelector(state=>state.cart.items)
   const order = useSelector(state=>state.order)
@@ -19,7 +21,7 @@ const CheckoutPage = () => {
   }
   const placeOrder = ()=>{
     if(order.shipping_address){
-      dispatch(placeOrderAC(order));
+      dispatch(placeOrderAC(order,navigate));
       dispatch(emptyCartAC());
     }else{
       alert('Choose a Shipping Address');

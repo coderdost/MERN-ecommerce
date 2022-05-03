@@ -43,7 +43,7 @@ root.render(
         <Route path="checkout" element={<CheckoutPage />} />
         <Route path="myorders" element={<OrdersPage />} />
         <Route path="login" element={<LoginSignupPage />} />
-        <Route path="ordersuccess" element={<OrderSuccessPage />} />
+        <Route path="ordersuccess/:orderid" element={<OrderSuccessPage />} />
         <Route path="product/:productId" element={<ProductDetailsPage />} />
         <Route path="*" element={<NoPage />} />
 

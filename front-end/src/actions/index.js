@@ -1,4 +1,5 @@
 import axios from 'axios';
+axios.defaults.withCredentials = true;
 
 export const CHANGED_ITEM_IN_CART ='CHANGED_ITEM_IN_CART';
 export const CHANGE_ORDER_CART = 'CHANGE_ORDER_CART';
@@ -9,12 +10,13 @@ export const INIT_PRODUCTS = 'INIT_PRODUCTS';
 export const INIT_CART = 'INIT_CART';
 export const INIT_USER = 'INIT_USER';
 
-export const loginAC = (user)=>{
+export const loginAC = (user,navigate)=>{
   return function(dispatch){
     axios.post('http://localhost:8080/login',{user}).then(function (response) {
         if(response.data.status){
           dispatch({type:INIT_USER, payload: response.data.user})
           dispatch(initializeCartAC(response.data.user._id));
+          navigate('/');
         };
        
       })
@@ -25,12 +27,34 @@ export const loginAC = (user)=>{
 }
 }
 
-export const signupAC = (user)=>{
+export const checkAuthAC = (navigate)=>{
+  return function(dispatch){
+    axios.get('http://localhost:8080/user').then(function (response) {
+      console.log('auth',response.data);
+        if(response.data.status){
+          dispatch({type:INIT_USER, payload: response.data.user})
+          dispatch(initializeCartAC(response.data.user._id));
+          navigate('/');
+        } else {
+          navigate('/login');
+        }
+       
+      })
+      .catch(function (error) {
+        console.log(error.response.data);
+        navigate('/login');
+      })  
+}
+}
+
+export const signupAC = (user,navigate)=>{
   return function(dispatch){
     axios.post('http://localhost:8080/signup',{user}).then(function (response) {
       if(response.data.status){
         dispatch({type:INIT_USER, payload: response.data.user})
         dispatch(initializeCartAC(response.data.user._id));
+        navigate('/');
+
       };
       })
       .catch(function (error) {
@@ -110,11 +134,12 @@ export const setShipAddressAC = (address)=>{  //AC = Action Creator
             dispatch({type:SET_SHIP_ADDRESS, payload:address})
     }
 }
-export const placeOrderAC = (order)=>{  //AC = Action Creator
+export const placeOrderAC = (order,navigate)=>{  //AC = Action Creator
     return function(dispatch){
         axios.post('http://localhost:8080/order',{order}).then(function (response) {
             console.log(response);
             dispatch({type:PLACE_ORDER, payload:response.data})
+            navigate('/ordersuccess/'+response.data._id);
           })
           .catch(function (error) {
             console.log(error);

@@ -5,9 +5,20 @@ const PORT = 8080;
 const app  = express();
 const cors = require('cors');
 const json = require('body-parser').json;
+const session = require('express-session')
 
-app.use(cors())
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET','POST'],
+    credentials: true
+}))
 app.use(json());
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+  }));
 
 const productSchema = new Schema({
     name:  {type:String, required:true}, 
@@ -98,8 +109,9 @@ async function main() {
 
 app.post('/login',(req,res)=>{
     console.log(req.body.user);
-    User.findOne({username: req.body.user.username, password:req.body.user.password}).then(result=>{
+    User.findOne({username: req.body.user.username, password:req.body.user.password}).populate('orders').then(result=>{
         if(result){
+            req.session.user = result;
             res.send({status:true, user:result});
         } else{
             res.status(404).send({status:false});
@@ -118,6 +130,7 @@ app.post('/signup',(req,res)=>{
             res.status(404).send({status:false});
         } else {
             user.save().then(usr=>{
+                req.session.user = usr;
                 res.send({status:true, user:usr});
             })
         }
@@ -125,6 +138,15 @@ app.post('/signup',(req,res)=>{
 
   
 })
+
+app.get('/user',(req,res)=>{
+  if(req.session.user){
+    res.send({status:true, user:req.session.user});
+  } else {
+    res.send({status:false});
+  }
+});
+
 
 
 app.get('/product',(req,res)=>{
@@ -135,7 +157,7 @@ app.get('/product',(req,res)=>{
 
 app.post('/cart',(req,res)=>{
     
-    const userId = "626aa06cc41d6e55885c99e5";  // This will be solved by Sessions
+    const userId = req.session.user._id;  // This will be solved by Sessions
     const item = req.body.item;
     if(!item.quantity){
         item.quantity =1;
@@ -165,7 +187,7 @@ app.post('/cart',(req,res)=>{
  });
 app.get('/cart',(req,res)=>{
     
-    const userId = "626aa06cc41d6e55885c99e5";
+    const userId = req.session.user._id;
     Cart.findOne({userId:userId}).then(result=>{
         if(result){
             res.send(result)
@@ -177,7 +199,7 @@ app.get('/cart',(req,res)=>{
  });
 app.post('/removeItem',(req,res)=>{
     
-    const userId = "626aa06cc41d6e55885c99e5";
+    const userId = req.session.user._id;
     const item = req.body.item;
     Cart.findOne({userId:userId}).then(result=>{
 
@@ -191,7 +213,7 @@ app.post('/removeItem',(req,res)=>{
  });
 app.post('/emptyCart',(req,res)=>{
     
-    const userId = "626aa06cc41d6e55885c99e5";
+    const userId = req.session.user._id;
     Cart.findOne({userId:userId}).then(result=>{
         result.items = [];
         result.save().then(cart=>{
@@ -202,7 +224,7 @@ app.post('/emptyCart',(req,res)=>{
  });
 
 app.post('/updateUserAddress',(req,res)=>{
-    const userId = "626aa06cc41d6e55885c99e5";
+    const userId = req.session.user._id;
     const address = req.body.address;
     User.findOne({userId:userId}).then((user)=>{
      user.addresses.push(address);
@@ -213,7 +235,7 @@ app.post('/updateUserAddress',(req,res)=>{
 }) 
 
 app.post('/order',(req,res)=>{
-    const userId = "626aa06cc41d6e55885c99e5";
+    const userId = req.session.user._id;
     const order = req.body.order;
     
     let newOrder = new Order(order);
@@ -221,7 +243,7 @@ app.post('/order',(req,res)=>{
         User.findOne({userId:userId}).then((user)=>{
             user.orders.push(savedOrder._id);
             user.save().then(user=>{
-                res.send(order);
+                res.send(savedOrder);
             })
            })
     })

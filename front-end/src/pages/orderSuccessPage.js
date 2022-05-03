@@ -1,8 +1,9 @@
+import { useParams } from "react-router-dom";
 import Footer from "../components/footer"
 
 
 const OrderSuccessPage = ()=>{
-
+    const params = useParams();
 
     return(
     <>
@@ -15,7 +16,7 @@ const OrderSuccessPage = ()=>{
            
 
             <div class="login-box m-auto mt-5 col-4 text-center">
-                <h3 class="text-center">Order #123 Successful</h3>
+                <h3 class="text-center">Order #{params.orderid} Successful</h3>
 
                 <i class="bi bi-check-circle-fill text-success success-icon"></i>
                  
