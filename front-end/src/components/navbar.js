@@ -1,6 +1,11 @@
-import { Link } from "react-router-dom";
-
-const Nav = ({cartCount})=>(
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { logoutAC } from "../actions";
+const Nav = ({cartCount})=>{
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
+  return(
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">
           <Link className="navbar-brand" to="/">E-shopper</Link>
@@ -36,7 +41,7 @@ const Nav = ({cartCount})=>(
                   <li><Link className="dropdown-item" to="/myorders" >My Orders</Link></li>
                   <li><a className="dropdown-item" href="/#" data-bs-toggle="modal" data-bs-target="#exampleModal">Profile</a></li>
                   <li><hr className="dropdown-divider"/></li>
-                  <li><a className="dropdown-item" href="/#">Logout</a></li>
+                  <li onClick={(e)=>{dispatch(logoutAC(navigate))}}><a className="dropdown-item" >Logout</a></li>
                 </ul>
               </li>
             </ul>
@@ -50,6 +55,6 @@ const Nav = ({cartCount})=>(
           </div>
         </div>
       </nav>
-)
+)}
 
 export default Nav;

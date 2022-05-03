@@ -65,6 +65,22 @@ export const signupAC = (user,navigate)=>{
 }
 }
 
+
+export const logoutAC = (navigate)=>{
+  return function(dispatch){
+    axios.get('http://localhost:8080/logout').then(function (response) {
+     console.log('logoutAC');   
+    if(response.data.status){
+          dispatch({type:INIT_USER, payload: {}})
+          navigate('/login');
+        };
+       
+      })
+      .catch(function (error) {
+        console.log(error.response.data);
+      })  
+}
+}
 export const initializeProductsAC = ()=>{  
     return function(dispatch){
         axios.get('http://localhost:8080/product').then(function (response) {

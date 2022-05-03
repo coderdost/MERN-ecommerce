@@ -120,6 +120,11 @@ app.post('/login',(req,res)=>{
     })
 })
 
+app.get('/logout',(req,res)=>{
+   req.session.user = null;
+   res.send({status: true})
+})
+
 app.post('/signup',(req,res)=>{
 
 
